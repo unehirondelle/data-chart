@@ -16,21 +16,18 @@ class App extends Component {
                 backgroundColor: 'rgba(75,192,192,1)',
                 borderColor: 'rgba(0,0,0,1)',
                 borderWidth: 2,
-                data: [65, 59.5, 80.4, 100.5, 56]
+                data: []
             }
         ]
     }
 
-    componentDidMount() {
 
+    componentDidMount() {
+        let updatedState = {...this.state};
         fetch(`http://localhost:3002/data`)
             .then(
                 res => res.json()
             )
-            /*.then(json => {
-                console.log('json', json);
-                return JSON.stringify(json)
-            })*/
             .then(jsonStr => {
                 console.log('jsonStr', jsonStr);
                 jsonStr.map(i => {
@@ -38,16 +35,17 @@ class App extends Component {
                     i.datapoints.map(dataItem => {
                         let [load, date] = dataItem;
                         if (load !== null) {
-                            // console.log('load', load)
-                            let dateLabel = new Date(date);
-                            this.setState(prevState => ({
-                                    labels: [...prevState.labels, dateLabel],
-                                    // datasets: [...prevState.datasets[0].data, load]
-                                }
-                            ))
+                            let dateLabel = new Date(date * 1000);
+                            updatedState.labels.push(dateLabel);
+                            updatedState.datasets[0].data.push(load);
+                            console.log('updatedState', updatedState);
+                            return updatedState;
                         }
                     })
                 })
+            })
+            .then(data => {
+                this.setState(updatedState)
             })
             .catch(function (err) {
                 console.log(err);
