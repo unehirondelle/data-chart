@@ -39,7 +39,6 @@ class App extends Component {
                             updatedState.labels.push(dateLabel);
                             updatedState.datasets[0].data.push(load);
                             console.log('updatedState', updatedState);
-                            return updatedState;
                         }
                     })
                 })
