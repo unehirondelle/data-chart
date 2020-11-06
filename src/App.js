@@ -1,4 +1,5 @@
 import './App.css';
+import Header from './components/header/header';
 
 import React, {Component} from 'react';
 import {Line} from 'react-chartjs-2';
@@ -53,22 +54,25 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-                <Line
-                    data={this.state}
-                    options={{
-                        title: {
-                            display: true,
-                            text: 'Testing the chart',
-                            fontsize: 20
-                        },
-                        legend: {
-                            display: true,
-                            position: 'right'
-                        }
-                    }}
-                />
-            </div>
+            <>
+                <Header/>
+                <div className="App">
+                    <Line
+                        data={this.state}
+                        options={{
+                            title: {
+                                display: true,
+                                text: 'Testing the chart',
+                                fontsize: 20
+                            },
+                            legend: {
+                                display: true,
+                                position: 'right'
+                            }
+                        }}
+                    />
+                </div>
+            </>
         );
     }
 }

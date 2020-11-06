@@ -1,5 +1,4 @@
 const express = require('express');
-const request = require('request');
 const cors = require('cors');
 const app = express();
 
@@ -16,7 +15,10 @@ const corsOptions = {
     }
 }
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 
 app.get('/data', async function (req, res, next) {
     // switch (req.headers.function) {
