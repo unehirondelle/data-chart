@@ -1,9 +1,9 @@
 import './App.css';
 import moment from 'moment';
 import Header from './components/header/header';
-import {Row} from "react-bootstrap";
+import {Container, Row, Col} from "react-bootstrap";
 import React, {Component} from 'react';
-import {Line} from 'react-chartjs-2';
+import {Line, Pie} from 'react-chartjs-2';
 
 class App extends Component {
 
@@ -58,33 +58,85 @@ class App extends Component {
         return (
             <>
                 <Header/>
-                <div className="App">
+                <Container className="App">
                     <Row>
-                        <Line
-                            data={this.state}
-                            options={{
-                                title: {
-                                    display: true,
-                                    text: 'CPU',
-                                    fontsize: 20
-                                },
-                                legend: {
-                                    display: true,
-                                    position: 'right'
-                                },
-                                layout: {
-                                    padding: {
-                                        left: 50,
-                                        right:100,
-                                        top: 100,
-                                        bottom: 0
+                        <Col xs lg={8}>
+                            <Line
+                                data={this.state}
+                                options={{
+                                    title: {
+                                        display: true,
+                                        text: 'Linux CPU',
+                                        fontsize: 20
+                                    },
+                                    legend: {
+                                        display: true,
+                                        position: 'right'
+                                    },
+                                    layout: {
+                                        padding: {
+                                            left: 10,
+                                            right: 10,
+                                            top: 10,
+                                            bottom: 10
+                                        }
                                     }
-                                }
-                            }}
-                        />
+                                }}
+                            />
+                        </Col>
+                        <Col xs lg={4}>
+                            <Pie
+                                data={this.state}
+                                options={{
+                                    title: {
+                                        display: true,
+                                        text: 'Linux Memory',
+                                        fontsize: 20
+                                    },
+                                    legend: {
+                                        display: false,
+                                        position: 'bottom'
+                                    },
+                                    layout: {
+                                        padding: {
+                                            left: 10,
+                                            right: 10,
+                                            top: 10,
+                                            bottom: 10
+                                        }
+                                    }
+                                }}
+                            />
+                        </Col>
                     </Row>
-                </div>
-                <footer className='bg-dark text-center p-2'>
+                    <Row>
+                        <Col xs lg={8}>
+                            <Line
+                                data={this.state}
+                                options={{
+                                    title: {
+                                        display: true,
+                                        text: 'Linux Network',
+                                        fontsize: 20
+                                    },
+                                    legend: {
+                                        display: true,
+                                        position: 'right'
+                                    },
+                                    layout: {
+                                        padding: {
+                                            left: 10,
+                                            right: 10,
+                                            top: 10,
+                                            bottom: 10
+                                        }
+                                    }
+                                }}
+                            />
+                        </Col>
+                    </Row>
+                </Container>
+                <footer className='fixed-bottom bg-dark text-center p-2'>
                     <small className='text-white'>Irina Plaksina &copy; 2020</small>
                 </footer>
             </>
