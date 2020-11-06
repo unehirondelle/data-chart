@@ -14,9 +14,10 @@ class App extends Component {
                 label: 'CPU',
                 fill: false,
                 lineTension: 0.5,
-                backgroundColor: 'rgba(75,192,192,1)',
-                borderColor: 'rgba(0,0,0,1)',
-                borderWidth: 2,
+                backgroundColor: 'rgba(235, 247, 233, 1)',
+                borderColor: 'rgba(94, 240, 50, 1)',
+                borderWidth: 0.5,
+                pointRadius: 0,
                 data: []
             }
         ]
@@ -72,6 +73,9 @@ class App extends Component {
                         }}
                     />
                 </div>
+                <footer className='bg-dark text-center p-2'>
+                    <small className='text-white'>Irina Plaksina &copy; 2020</small>
+                </footer>
             </>
         );
     }
