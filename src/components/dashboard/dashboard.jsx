@@ -1,103 +1,70 @@
-import './App.css';
-import moment from 'moment';
-import Header from './components/header/header';
-import {Container, Row, Col, Form, InputGroup, Button, ButtonGroup} from "react-bootstrap";
-import React, {Component} from 'react';
-import {Line, Pie} from 'react-chartjs-2';
+import moment from "moment";
+import {BrowserRouter} from "react-router-dom";
+import Header from "../header/header";
+import {Button, ButtonGroup, Col, Container, Form, InputGroup, Row} from "react-bootstrap";
+import {Line, Pie} from "react-chartjs-2";
+import React, {Component} from "react";
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            labels: [],
-            datasets: [
-                {
-                    fill: false,
-                    label: 'load',
-                    lineTension: 0.5,
-                    backgroundColor: 'rgba(235, 247, 233, 1)',
-                    borderColor: 'rgba(94, 240, 50, 1)',
-                    borderWidth: 0.5,
-                    pointRadius: 0,
-                    data: []
-                }
-            ],
-            hostName: 'logic-test-01',
-            chartName: 'Linux_CPU',
-            metricName: 'idle'
-        };
-        this.handleChange = this.handleChange.bind(this);
-    }
+class Dashboard extends Component {
+    state = {
+        labels: [],
+        datasets: [
+            {
+                fill: false,
+                label: 'load',
+                lineTension: 0.5,
+                backgroundColor: 'rgba(235, 247, 233, 1)',
+                borderColor: 'rgba(94, 240, 50, 1)',
+                borderWidth: 0.5,
+                pointRadius: 0,
+                data: []
+            }
+        ],
+        hostName: 'logic-test-01',
+        chartName: 'Linux_CPU',
+        metricName: 'idle'
+    };
+    handleChange = this.handleChange.bind(this);
+
 
     handleChange(event) {
-        this.setState({hostName: event.target.value});
+        this.setState({hostName: event.target.value}
+            , () => {
+                this.props.history.push(`/${this.state.hostName}/${this.state.chartName}/${this.state.metricName}`)
+            });
     }
 
     componentDidMount() {
         let updatedState = {...this.state};
-        let loadArray = [];
-        let labelsArray = [];
         const {hostName, chartName, metricName} = this.state;
         fetch(`http://localhost:3002/data/${hostName}/${chartName}/${metricName}`)
             .then(
                 res => res.json()
             )
             .then(jsonStr => {
+                console.log('jsonStr', jsonStr);
                 jsonStr.map(i => {
+                    // console.log('item', i.datapoints);
                     i.datapoints.map(dataItem => {
                         let [load, date] = dataItem;
                         if (load !== null) {
                             let dateLabel = new Date(date * 1000);
-                            labelsArray.push(moment(dateLabel).format('HH:mm:ss'));
-                            loadArray.push(load);
-                            updatedState.labels = labelsArray;
-                            updatedState.datasets[0].data = loadArray;
+                            updatedState.labels.push(moment(dateLabel).format('HH:mm:ss'));
+                            updatedState.datasets[0].data.push(load);
+                            // console.log('updatedState', updatedState);
                         }
                     })
                 })
             })
             .then(data => {
+
                 this.setState(updatedState)
             })
             .catch(function (err) {
                 console.log(err);
             });
-    };
-
-
-    componentDidUpdate(prevProps, prevState) {
-        if ((prevState.hostName !== this.state.hostName) || (prevState.chartName !== this.state.chartName) || (prevState.metricName !== this.state.metricName)) {
-            let updatedDatasets = [...this.state.datasets];
-            let updatedLabels = [...this.state.labels];
-            let loadArray = [];
-            let labelsArray = [];
-            const {hostName, chartName, metricName} = this.state;
-            fetch(`http://localhost:3002/data/${hostName}/${chartName}/${metricName}`)
-                .then(
-                    res => res.json()
-                )
-                .then(jsonStr => {
-                    jsonStr.map(i => {
-                        i.datapoints.map(dataItem => {
-                            let [load, date] = dataItem;
-                            if (load !== null) {
-                                let dateLabel = new Date(date * 1000);
-                                labelsArray.push(moment(dateLabel).format('HH:mm:ss'));
-                                loadArray.push(load);
-                                updatedLabels = labelsArray;
-                                updatedDatasets[0].data = loadArray;
-                            }
-                        })
-                    })
-                })
-                .then(data => {
-                    this.setState({labels: updatedLabels, datasets: updatedDatasets})
-                })
-                .catch(function (err) {
-                    console.log(err);
-                });
-        }
     }
+    ;
 
     render() {
 
@@ -235,11 +202,8 @@ class App extends Component {
                     <small className='text-white'>Irina Plaksina &copy; 2020</small>
                 </footer>
             </>
-        )
-            ;
-
-
+        );
     }
 }
 
-export default App;
+export default Dashboard;
