@@ -37,3 +37,26 @@
         transform: rotate(360deg);
     }
 }
+
+.dark-control, .form-control:focus, .form-control:hover, option:hover {
+    color: rgba(94, 240, 50, 1);
+    background-color: #343a40;
+    border-color: #343a40;
+    border-left-color: #dcdcdc;
+    box-shadow: none;
+}
+
+.dark-label {
+    border-color: #343a40;
+    border-right-color: #dcdcdc;
+    color: #dcdcdc;
+    background-color: #343a40;
+}
+
+.dark-button, .dark-button:hover {
+    color: rgba(94, 240, 50, 1);
+}
+
+.btn-sm, .btn-group-sm > .btn {
+    font-size: 0.7rem;
+}
