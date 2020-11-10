@@ -21,13 +21,17 @@ class App extends Component {
                 pointRadius: 0,
                 data: []
             }
-        ]
+        ],
+        hostName: 'logic-test-01',
+        chartName: 'Linux_CPU',
+        metricName: 'idle'
     }
 
 
     componentDidMount() {
         let updatedState = {...this.state};
-        fetch(`http://localhost:3002/data`)
+        const {hostName, chartName, metricName} = this.state;
+        fetch(`http://localhost:3002/data/${hostName}/${chartName}/${metricName}`)
             .then(
                 res => res.json()
             )
@@ -55,6 +59,7 @@ class App extends Component {
     };
 
     render() {
+
         return (
             <>
                 <Header/>
@@ -185,6 +190,12 @@ class App extends Component {
                 </footer>
             </>
         );
+
+        /*function handleParameterChoice() {
+            let selectedHostName = document.getElementsByClassName('hostName').value;
+            this.setState({hostName: selectedHostName});
+            console.log({selectedHostName});
+        };*/
     }
 }
 
