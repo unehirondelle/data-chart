@@ -24,11 +24,7 @@ class CpuChart extends Component {
     };
 
     handleChange = (event) => {
-        this.setState({metricName: event.target.dataset.metric}, () => {
-            if (this.props.onChange) {
-                this.props.onChange(this.state);
-            }
-        });
+        this.setState({metricName: event.target.dataset.metric});
     };
 
     componentDidMount() {
@@ -128,7 +124,7 @@ class CpuChart extends Component {
                               fontsize: 20
                           },
                           legend: {
-                              display: true,
+                              display: false,
                               position: 'right'
                           },
                           layout: {
@@ -137,9 +133,7 @@ class CpuChart extends Component {
                                   right: 10,
                                   top: 10,
                                   bottom: 10
-                              },
-                              xAxisID: 'date',
-                              yAxisID: '%'
+                              }
                           }
                       }}
                 />

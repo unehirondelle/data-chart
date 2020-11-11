@@ -18,11 +18,7 @@ class MemoryChart extends Component {
     }
 
     handleChange = (event) => {
-        this.setState({metricName: event.target.dataset.metric}, () => {
-            if (this.props.onChange) {
-                this.props.onChange(this.state);
-            }
-        });
+        this.setState({metricName: event.target.dataset.metric});
     };
 
     componentDidMount() {

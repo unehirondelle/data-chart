@@ -23,11 +23,7 @@ class NetworkChart extends Component {
     }
 
     handleChange = (event) => {
-        this.setState({metricName: event.target.dataset.metric}, () => {
-            if (this.props.onChange) {
-                this.props.onChange(this.state);
-            }
-        });
+        this.setState({metricName: event.target.dataset.metric});
     };
 
     componentDidMount() {
@@ -102,10 +98,14 @@ class NetworkChart extends Component {
             <>
                 <ButtonGroup size='sm' aria-label="networkData" className='shadow'
                              data-chart='Linux_Network'>
-                    <Button variant="secondary" className='dark-button' data-metric='eth0_txbyt' onClick={this.handleChange}>eth0_txbyt</Button>
-                    <Button variant="secondary" className='dark-button' data-metric='eth0_txerr' onClick={this.handleChange}>eth0_txerrs</Button>
-                    <Button variant="secondary" className='dark-button' data-metric='eth0_rxbyt' onClick={this.handleChange}>eth0_rxbyt</Button>
-                    <Button variant="secondary" className='dark-button' data-metric='eth0_rxerrs' onClick={this.handleChange}>eth0_rxerrs</Button>
+                    <Button variant="secondary" className='dark-button' data-metric='eth0_txbyt'
+                            onClick={this.handleChange}>eth0_txbyt</Button>
+                    <Button variant="secondary" className='dark-button' data-metric='eth0_txerr'
+                            onClick={this.handleChange}>eth0_txerrs</Button>
+                    <Button variant="secondary" className='dark-button' data-metric='eth0_rxbyt'
+                            onClick={this.handleChange}>eth0_rxbyt</Button>
+                    <Button variant="secondary" className='dark-button' data-metric='eth0_rxerrs'
+                            onClick={this.handleChange}>eth0_rxerrs</Button>
                 </ButtonGroup>
                 <Line
                     data={this.state}
@@ -116,7 +116,7 @@ class NetworkChart extends Component {
                             fontsize: 20
                         },
                         legend: {
-                            display: true,
+                            display: false,
                             position: 'right'
                         },
                         layout: {
