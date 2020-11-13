@@ -2,23 +2,26 @@ const express = require('express');
 const base64 = require('base-64');
 const fetch = require('node-fetch');
 const cors = require('cors');
+const path = require('path');
 const app = express();
 
-const whitelist = ['http://localhost:3002']
+
+const PORT = process.env.PORT || 3002;
+
+const whitelist = ['http://localhost:3000']
 const corsOptions = {
     origin: function (origin, callback) {
-        // if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true)
-        // } else {
-        //     callback(new Error('Not allowed by CORS'))
-        // }
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
     }
 }
 
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-
 
 app.get('/data/:hostName/:chartName/:metricName', async function (req, res, next) {
     const hostName = req.params.hostName;
@@ -40,4 +43,14 @@ app.get('/data/:hostName/:chartName/:metricName', async function (req, res, next
         });
 })
 
-app.listen(3002);
+if (process.env.NODE_ENV === 'production') {
+    // serve static files
+    app.use(express.static(path.join(__dirname, 'client/build')));
+
+    // handle React routing
+    app.get('*', function (req, res) {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
+}
+
+app.listen(PORT);
