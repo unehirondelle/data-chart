@@ -121,7 +121,8 @@ class CpuChart extends Component {
                           title: {
                               display: true,
                               text: 'Linux CPU',
-                              fontsize: 20
+                              fontsize: 20,
+                              fontFamily: "'Jura', sans-serif"
                           },
                           legend: {
                               display: false,

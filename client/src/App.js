@@ -20,7 +20,7 @@ class App extends Component {
         return (
             <>
                 <Header/>
-                <Container className="App">
+                <Container className="App mb-5">
                     <Row className='my-2'>
                         <Col xs={4}>
                             <InputGroup size='sm' className='hostSelector shadow'>

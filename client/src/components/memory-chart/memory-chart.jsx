@@ -14,12 +14,16 @@ class MemoryChart extends Component {
             }
         ],
         metricName: 'Active',
-        chartName: 'Linux_Memory'
+        chartName: 'Linux_Memory',
+        canvasWidth: 250,
+        canvasHeight: 300
     }
 
     handleChange = (event) => {
         this.setState({metricName: event.target.dataset.metric});
     };
+
+    canvasRef = React.createRef();
 
     componentDidMount() {
         let updatedState = {...this.state};
@@ -105,16 +109,21 @@ class MemoryChart extends Component {
                             data-metric='SwapCached'>SwapCached</Button>
                 </ButtonGroup>
                 <Pie
+                    ref={this.canvasRef}
+                    width={this.state.canvasWidth}
+                    height={this.state.canvasHeight}
                     data={this.state}
                     options={{
                         title: {
                             display: true,
                             text: 'Linux Memory',
-                            fontsize: 20
+                            fontsize: 20,
+                            fontFamily: "'Jura', sans-serif"
                         },
                         legend: {
                             display: false,
-                            position: 'right'
+                            position: 'right',
+                            boxWidth: 10
                         },
                         layout: {
                             padding: {

@@ -113,7 +113,8 @@ class NetworkChart extends Component {
                         title: {
                             display: true,
                             text: 'Linux Network',
-                            fontsize: 20
+                            fontsize: 20,
+                            fontFamily: "'Jura', sans-serif"
                         },
                         legend: {
                             display: false,
