@@ -7,14 +7,14 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-const whitelist = ['https://data-chart-app.herokuapp.com/']
+const whitelist = ['http://127.0.0.1:3000/', 'https://data-chart-app.herokuapp.com/']
 const corsOptions = {
     origin: function (origin, callback) {
-        // if (whitelist.indexOf(origin) !== -1) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
             callback(null, true)
-        // } else {
-        //     callback(new Error('Not allowed by CORS'))
-        // }
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
     }
 }
 
