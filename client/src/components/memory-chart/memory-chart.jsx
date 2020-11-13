@@ -17,7 +17,7 @@ class MemoryChart extends Component {
     }
 
     getMemoryData = () => {
-        let updatedDatasets = [...this.state.datasets];
+        let updatedState = {...this.state};
         let loadArray = [];
         let labelsArray = [];
         const {chartName} = this.state;
@@ -32,17 +32,20 @@ class MemoryChart extends Component {
                         let [load] = dataItem;
                         if (load !== null) {
                             const tokenStart = i.target.indexOf('.perfdata') + 10;
-                            const tokenEnd = i.target.indexOf('.value')
-                            const metricName = i.target.substring(tokenStart, tokenEnd)
-                            labelsArray.push(metricName);
-                            loadArray.push(load);
-                            updatedDatasets[0].data = loadArray;
+                            const tokenEnd = i.target.indexOf('.value');
+                            const metricName = i.target.substring(tokenStart, tokenEnd);
+                            if (labelsArray.indexOf(metricName) === -1) {
+                                labelsArray.push(metricName);
+                                loadArray.push(load);
+                                updatedState.labels = labelsArray;
+                                updatedState.datasets[0].data = loadArray;
+                            }
                         }
                     })
                 })
             })
             .then(data => {
-                this.setState({labels: labelsArray, datasets: updatedDatasets})
+                this.setState(updatedState)
             })
             .catch(function (err) {
                 console.log(err);
@@ -51,12 +54,14 @@ class MemoryChart extends Component {
 
     componentDidMount() {
         this.getMemoryData();
+        console.log('component did mount')
     };
 
 
     componentDidUpdate(prevProps, prevState) {
         if ((prevProps.hostName !== this.props.hostName) || (prevState.chartName !== this.state.chartName) || (prevState.metricName !== this.state.metricName)) {
             this.getMemoryData();
+            console.log('component did update')
         }
     }
 

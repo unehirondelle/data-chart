@@ -23,11 +23,11 @@ class CpuChart extends Component {
         chartName: 'Linux_CPU'
     };
 
-    handleChange = (event) => {
+    handleMetricChange = (event) => {
         this.setState({metricName: event.target.dataset.metric});
     };
 
-    componentDidMount() {
+    getData = () => {
         let updatedState = {...this.state};
         let loadArray = [];
         let labelsArray = [];
@@ -57,40 +57,15 @@ class CpuChart extends Component {
             .catch(function (err) {
                 console.log(err);
             });
+    }
+
+    componentDidMount() {
+        this.getData();
     };
 
     componentDidUpdate(prevProps, prevState) {
         if ((prevProps.hostName !== this.props.hostName) || (prevState.chartName !== this.state.chartName) || (prevState.metricName !== this.state.metricName)) {
-            let updatedDatasets = [...this.state.datasets];
-            let updatedLabels = [...this.state.labels];
-            let loadArray = [];
-            let labelsArray = [];
-            const {chartName, metricName} = this.state;
-            const hostName = this.props.hostName;
-            fetch(`/data/${hostName}/${chartName}/${metricName}`)
-                .then(
-                    res => res.json()
-                )
-                .then(jsonStr => {
-                    jsonStr.map(i => {
-                        i.datapoints.map(dataItem => {
-                            let [load, date] = dataItem;
-                            if (load !== null) {
-                                let dateLabel = new Date(date * 1000);
-                                labelsArray.push(moment(dateLabel).format('HH:mm:ss'));
-                                loadArray.push(load);
-                                updatedLabels = labelsArray;
-                                updatedDatasets[0].data = loadArray;
-                            }
-                        })
-                    })
-                })
-                .then(data => {
-                    this.setState({labels: updatedLabels, datasets: updatedDatasets})
-                })
-                .catch(function (err) {
-                    console.log(err);
-                });
+            this.getData();
         }
     }
 
@@ -101,19 +76,19 @@ class CpuChart extends Component {
                 >
                     <Button variant="secondary" className='dark-button'
                             data-metric='idle' data-chart='Linux_CPU'
-                            onClick={this.handleChange}>idle</Button>
+                            onClick={this.handleMetricChange}>idle</Button>
                     <Button variant="secondary" className='dark-button'
                             data-metric='user' data-chart='Linux_CPU'
-                            onClick={this.handleChange}>user</Button>
+                            onClick={this.handleMetricChange}>user</Button>
                     <Button variant="secondary" className='dark-button'
                             data-metric='system' data-chart='Linux_CPU'
-                            onClick={this.handleChange}>system</Button>
+                            onClick={this.handleMetricChange}>system</Button>
                     <Button variant="secondary" className='dark-button'
                             data-metric='iowait' data-chart='Linux_CPU'
-                            onClick={this.handleChange}>iowait</Button>
+                            onClick={this.handleMetricChange}>iowait</Button>
                     <Button variant="secondary" className='dark-button'
                             data-metric='steal' data-chart='Linux_CPU'
-                            onClick={this.handleChange}>steal</Button>
+                            onClick={this.handleMetricChange}>steal</Button>
                 </ButtonGroup>
                 <Line className='shadow'
                       data={this.state}

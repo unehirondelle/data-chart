@@ -5,6 +5,7 @@ import Header from './components/header/header';
 import CpuChart from "./components/cpu-chart/cpu-chart";
 import MemoryChart from "./components/memory-chart/memory-chart";
 import NetworkChart from "./components/network-chart/network-chart";
+import moment from "moment";
 
 class App extends Component {
 
