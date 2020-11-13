@@ -27,7 +27,9 @@ app.get('/data/:hostName/:chartName/:metricName', async function (req, res, next
     const chartName = req.params.chartName;
     const metricName = req.params.metricName;
 
-    await fetch(`http://18.236.126.230/render?target=icinga2.${hostName}.services.${chartName}.check_nrpe.perfdata.${metricName}.value&from=-1h&format=json`, {
+    const timePeriod = metricName === '*' ? '-2min' : '-1h';
+    console.log(`metricName=${metricName}, timePeriod=${timePeriod}`)
+    await fetch(`http://18.236.126.230/render?target=icinga2.${hostName}.services.${chartName}.check_nrpe.perfdata.${metricName}.value&from=${timePeriod}&format=json`, {
         headers: {
             'Accept': 'application/json',
             "Authorization": `Basic ${base64.encode(`tester:testing`)}`

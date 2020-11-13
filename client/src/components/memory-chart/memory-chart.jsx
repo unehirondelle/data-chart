@@ -4,7 +4,7 @@ import {Pie} from 'react-chartjs-2';
 class MemoryChart extends Component {
 
     state = {
-        labels: ['Active', 'MemUsed', 'MemCached', 'SwapUsed', 'SwapCached'],
+        labels: [],
         datasets: [
             {
                 backgroundColor: ['#7DA32A', '#6594F0', '#CDF081', '#F06248', '#A3857F'],
@@ -16,98 +16,47 @@ class MemoryChart extends Component {
         canvasHeight: 400
     }
 
-    handleChange = (event) => {
-        this.setState({metricName: event.target.dataset.metric});
-    };
-
-    canvasRef = React.createRef();
-
-    componentDidMount() {
+    getMemoryData = () => {
         let updatedDatasets = [...this.state.datasets];
         let loadArray = [];
+        let labelsArray = [];
         const {chartName} = this.state;
-        const metricName = `*`;
         const hostName = this.props.hostName;
-        fetch(`/data/${hostName}/${chartName}/${metricName}`)
+        fetch(`/data/${hostName}/${chartName}/*`)
             .then(
                 res => res.json()
             )
             .then(jsonStr => {
                 jsonStr.map(i => {
-                    if (i.target.includes("Active")) {
-                        loadArray[0] = i.datapoints[0][0] || i.datapoints[1][0];
-                        console.log('Active', i);
-                        updatedDatasets[0].data = loadArray;
-                    } else if (i.target.includes("MemUsed")) {
-                        loadArray[1] = i.datapoints[0][0] || i.datapoints[1][0];
-                        console.log('MemUsed', i);
-                        updatedDatasets[0].data = loadArray;
-                    } else if (i.target.includes("MemCached")) {
-                        loadArray[2] = i.datapoints[0][0] || i.datapoints[1][0];
-                        console.log('MemCached', i);
-                        updatedDatasets[0].data = loadArray;
-                    } else if (i.target.includes("SwapUsed")) {
-                        loadArray[3] = i.datapoints[0][0] || i.datapoints[1][0];
-                        console.log('SwapUsed', i);
-                        updatedDatasets[0].data = loadArray;
-                    } else if (i.target.includes("SwapCached")) {
-                        loadArray[4] = i.datapoints[0][0] || i.datapoints[1][0];
-                        console.log('SwapCached', i);
-                        updatedDatasets[0].data = loadArray;
-                    }
+                    i.datapoints.map(dataItem => {
+                        let [load] = dataItem;
+                        if (load !== null) {
+                            const tokenStart = i.target.indexOf('.perfdata') + 10;
+                            const tokenEnd = i.target.indexOf('.value')
+                            const metricName = i.target.substring(tokenStart, tokenEnd)
+                            labelsArray.push(metricName);
+                            loadArray.push(load);
+                            updatedDatasets[0].data = loadArray;
+                        }
+                    })
                 })
             })
             .then(data => {
-                this.setState({datasets: updatedDatasets})
+                this.setState({labels: labelsArray, datasets: updatedDatasets})
             })
             .catch(function (err) {
                 console.log(err);
             });
+    }
+
+    componentDidMount() {
+        this.getMemoryData();
     };
 
 
     componentDidUpdate(prevProps, prevState) {
         if ((prevProps.hostName !== this.props.hostName) || (prevState.chartName !== this.state.chartName) || (prevState.metricName !== this.state.metricName)) {
-            let updatedDatasets = [...this.state.datasets];
-            let loadArray = [];
-            const {chartName} = this.state;
-            const metricName = `*`;
-            const hostName = this.props.hostName;
-            fetch(`/data/${hostName}/${chartName}/${metricName}`)
-                .then(
-                    res => res.json()
-                )
-                .then(jsonStr => {
-                    jsonStr.map(i => {
-                        if (i.target.includes("Active")) {
-                            loadArray[0] = i.datapoints[0][0] || i.datapoints[1][0];
-                            console.log('Active', i);
-                            updatedDatasets[0].data = loadArray;
-                        } else if (i.target.includes("MemUsed")) {
-                            loadArray[1] = i.datapoints[0][0] || i.datapoints[1][0];
-                            console.log('MemUsed', i);
-                            updatedDatasets[0].data = loadArray;
-                        } else if (i.target.includes("MemCached")) {
-                            loadArray[2] = i.datapoints[0][0] || i.datapoints[1][0];
-                            console.log('MemCached', i);
-                            updatedDatasets[0].data = loadArray;
-                        } else if (i.target.includes("SwapUsed")) {
-                            loadArray[3] = i.datapoints[0][0] || i.datapoints[1][0];
-                            console.log('SwapUsed', i);
-                            updatedDatasets[0].data = loadArray;
-                        } else if (i.target.includes("SwapCached")) {
-                            loadArray[4] = i.datapoints[0][0] || i.datapoints[1][0];
-                            console.log('SwapCached', i);
-                            updatedDatasets[0].data = loadArray;
-                        }
-                    })
-                })
-                .then(data => {
-                    this.setState({datasets: updatedDatasets})
-                })
-                .catch(function (err) {
-                    console.log(err);
-                });
+            this.getMemoryData();
         }
     }
 
