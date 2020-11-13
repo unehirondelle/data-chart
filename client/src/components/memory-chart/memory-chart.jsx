@@ -1,7 +1,5 @@
-import moment from 'moment';
 import React, {Component} from 'react';
 import {Pie} from 'react-chartjs-2';
-import {Button, ButtonGroup} from "react-bootstrap";
 
 class MemoryChart extends Component {
 
@@ -9,38 +7,39 @@ class MemoryChart extends Component {
         labels: [],
         datasets: [
             {
-                backgroundColor: 'rgba(94, 240, 50, 1)',
+                backgroundColor: ['#7DA32A', '#6594F0', '#CDF081', '#F06248', '#A3857F'],
                 data: []
             }
         ],
-        metricName: 'Active',
-        chartName: 'Linux_Memory'
+        chartName: 'Linux_Memory',
+        canvasWidth: 500,
+        canvasHeight: 400
     }
 
-    handleChange = (event) => {
-        this.setState({metricName: event.target.dataset.metric});
-    };
-
-    componentDidMount() {
+    getMemoryData = () => {
         let updatedState = {...this.state};
         let loadArray = [];
         let labelsArray = [];
-        const {chartName, metricName} = this.state;
+        const {chartName} = this.state;
         const hostName = this.props.hostName;
-        fetch(`/data/${hostName}/${chartName}/${metricName}`)
+        fetch(`/data/${hostName}/${chartName}/*`)
             .then(
                 res => res.json()
             )
             .then(jsonStr => {
                 jsonStr.map(i => {
                     i.datapoints.map(dataItem => {
-                        let [load, date] = dataItem;
+                        let [load] = dataItem;
                         if (load !== null) {
-                            let dateLabel = new Date(date * 1000);
-                            labelsArray.push(moment(dateLabel).format('HH:mm:ss'));
-                            loadArray.push(load);
-                            updatedState.labels = labelsArray;
-                            updatedState.datasets[0].data = loadArray;
+                            const tokenStart = i.target.indexOf('.perfdata') + 10;
+                            const tokenEnd = i.target.indexOf('.value');
+                            const metricName = i.target.substring(tokenStart, tokenEnd);
+                            if (labelsArray.indexOf(metricName) === -1) {
+                                labelsArray.push(metricName);
+                                loadArray.push(load);
+                                updatedState.labels = labelsArray;
+                                updatedState.datasets[0].data = loadArray;
+                            }
                         }
                     })
                 })
@@ -51,70 +50,40 @@ class MemoryChart extends Component {
             .catch(function (err) {
                 console.log(err);
             });
+    }
+
+    componentDidMount() {
+        this.getMemoryData();
+        console.log('component did mount')
     };
 
 
     componentDidUpdate(prevProps, prevState) {
         if ((prevProps.hostName !== this.props.hostName) || (prevState.chartName !== this.state.chartName) || (prevState.metricName !== this.state.metricName)) {
-            let updatedDatasets = [...this.state.datasets];
-            let updatedLabels = [...this.state.labels];
-            let loadArray = [];
-            let labelsArray = [];
-            const {chartName, metricName} = this.state;
-            const hostName = this.props.hostName;
-            fetch(`/data/${hostName}/${chartName}/${metricName}`)
-                .then(
-                    res => res.json()
-                )
-                .then(jsonStr => {
-                    jsonStr.map(i => {
-                        i.datapoints.map(dataItem => {
-                            let [load, date] = dataItem;
-                            if (load !== null) {
-                                let dateLabel = new Date(date * 1000);
-                                labelsArray.push(moment(dateLabel).format('HH:mm:ss'));
-                                loadArray.push(load);
-                                updatedLabels = labelsArray;
-                                updatedDatasets[0].data = loadArray;
-                            }
-                        })
-                    })
-                })
-                .then(data => {
-                    this.setState({labels: updatedLabels, datasets: updatedDatasets})
-                })
-                .catch(function (err) {
-                    console.log(err);
-                });
+            this.getMemoryData();
+            console.log('component did update')
         }
     }
 
     render() {
         return (
             <>
-                <ButtonGroup size='sm' aria-label="memoryData" className='shadow' data-chart='Linux_Memory'
-                             onClick={this.handleChange}>
-                    <Button variant="secondary" className='dark-button' data-metric='Active'>Active</Button>
-                    <Button variant="secondary" className='dark-button'
-                            data-metric='MemUsed'>MemUsed</Button>
-                    <Button variant="secondary" className='dark-button'
-                            data-metric='MemCached'>MemCached</Button>
-                    <Button variant="secondary" className='dark-button'
-                            data-metric='SwapUsed'>SwapUsed</Button>
-                    <Button variant="secondary" className='dark-button'
-                            data-metric='SwapCached'>SwapCached</Button>
-                </ButtonGroup>
                 <Pie
+                    ref={this.canvasRef}
+                    width={this.state.canvasWidth}
+                    height={this.state.canvasHeight}
                     data={this.state}
                     options={{
                         title: {
                             display: true,
                             text: 'Linux Memory',
-                            fontsize: 20
+                            fontsize: 20,
+                            fontFamily: "'Jura', sans-serif"
                         },
                         legend: {
-                            display: false,
-                            position: 'right'
+                            display: true,
+                            position: 'right',
+                            boxWidth: 10
                         },
                         layout: {
                             padding: {
@@ -122,6 +91,13 @@ class MemoryChart extends Component {
                                 right: 10,
                                 top: 10,
                                 bottom: 10
+                            }
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function (tooltipItem, data) {
+                                    return data['labels'][tooltipItem['index']] + ': ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                                }
                             }
                         }
                     }}
