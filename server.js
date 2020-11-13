@@ -3,19 +3,18 @@ const base64 = require('base-64');
 const fetch = require('node-fetch');
 const cors = require('cors');
 const path = require('path');
+
 const app = express();
-
-
 const PORT = process.env.PORT || 3002;
 
-const whitelist = ['http://localhost:3000']
+const whitelist = ['https://data-chart-app.herokuapp.com/']
 const corsOptions = {
     origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
+        // if (whitelist.indexOf(origin) !== -1) {
             callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
+        // } else {
+        //     callback(new Error('Not allowed by CORS'))
+        // }
     }
 }
 
