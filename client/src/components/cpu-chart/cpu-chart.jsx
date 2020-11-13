@@ -15,7 +15,7 @@ class CpuChart extends Component {
                 backgroundColor: 'rgba(235, 247, 233, 1)',
                 borderColor: 'rgba(94, 240, 50, 1)',
                 borderWidth: 0.5,
-                pointRadius: 0,
+                pointRadius: 0.5,
                 data: []
             }
         ],
@@ -110,6 +110,15 @@ class CpuChart extends Component {
                                   top: 10,
                                   bottom: 10
                               }
+                          },
+                          tooltips: {
+                              callbacks: {
+                                  label: function (tooltipItem, data) {
+                                      return data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                                  }
+                              },
+                              titleFontColor: 'rgba(94, 240, 50, 1)',
+                              backgroundColor: 'transparent'
                           }
                       }}
                 />
