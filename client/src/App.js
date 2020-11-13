@@ -22,7 +22,7 @@ class App extends Component {
                 <Header/>
                 <Container className="App mb-5">
                     <Row className='my-2'>
-                        <Col xs={4}>
+                        <Col xs={5} lg={4}>
                             <InputGroup size='sm' className='hostSelector shadow'>
                                 <InputGroup.Prepend>
                                     <InputGroup.Text id="hostOptions"
@@ -40,7 +40,7 @@ class App extends Component {
                         <Col xs lg={8}>
                             <CpuChart hostName={this.state.hostName}/>
                         </Col>
-                        <Col xs lg={4}>
+                        <Col xs={{offset: 3, span: 6}} lg={{offset: 0, span: 4}}>
                             <MemoryChart hostName={this.state.hostName}/>
                         </Col>
                     </Row>
