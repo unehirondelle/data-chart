@@ -28,3 +28,4 @@ https://dashboard.heroku.com/apps/data-chart-app
 2. Opportunity for user to add or remove charts
 3. Data update in a live mode
 4. Performance optimization using Redux or useReducer() hook
+5. Tests (jest, react testing-library)
