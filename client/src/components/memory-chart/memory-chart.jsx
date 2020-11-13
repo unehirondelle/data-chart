@@ -27,7 +27,7 @@ class MemoryChart extends Component {
         let labelsArray = [];
         const {chartName, metricName} = this.state;
         const hostName = this.props.hostName;
-        fetch(`http://localhost:3002/data/${hostName}/${chartName}/${metricName}`)
+        fetch(`/data/${hostName}/${chartName}/${metricName}`)
             .then(
                 res => res.json()
             )
@@ -62,7 +62,7 @@ class MemoryChart extends Component {
             let labelsArray = [];
             const {chartName, metricName} = this.state;
             const hostName = this.props.hostName;
-            fetch(`http://localhost:3002/data/${hostName}/${chartName}/${metricName}`)
+            fetch(`/data/${hostName}/${chartName}/${metricName}`)
                 .then(
                     res => res.json()
                 )
