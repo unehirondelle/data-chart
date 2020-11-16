@@ -74,19 +74,24 @@ class CpuChart extends Component {
             <>
                 <ButtonGroup size='sm' aria-label="cpuData" className='shadow'
                 >
-                    <Button variant="secondary" className='dark-button'
+                    <Button variant="secondary"
+                            className={this.state.metricName === 'idle' ? 'active dark-button' : 'dark-button'}
                             data-metric='idle' data-chart='Linux_CPU'
                             onClick={this.handleMetricChange}>idle</Button>
-                    <Button variant="secondary" className='dark-button'
+                    <Button variant="secondary"
+                            className={this.state.metricName === 'user' ? 'active dark-button' : 'dark-button'}
                             data-metric='user' data-chart='Linux_CPU'
                             onClick={this.handleMetricChange}>user</Button>
-                    <Button variant="secondary" className='dark-button'
+                    <Button variant="secondary"
+                            className={this.state.metricName === 'system' ? 'active dark-button' : 'dark-button'}
                             data-metric='system' data-chart='Linux_CPU'
                             onClick={this.handleMetricChange}>system</Button>
-                    <Button variant="secondary" className='dark-button'
+                    <Button variant="secondary"
+                            className={this.state.metricName === 'iowait' ? 'active dark-button' : 'dark-button'}
                             data-metric='iowait' data-chart='Linux_CPU'
                             onClick={this.handleMetricChange}>iowait</Button>
-                    <Button variant="secondary" className='dark-button'
+                    <Button variant="secondary"
+                            className={this.state.metricName === 'steal' ? 'active dark-button' : 'dark-button'}
                             data-metric='steal' data-chart='Linux_CPU'
                             onClick={this.handleMetricChange}>steal</Button>
                 </ButtonGroup>

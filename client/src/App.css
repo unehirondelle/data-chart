@@ -60,3 +60,7 @@
 .btn-sm, .btn-group-sm > .btn {
     font-size: 0.7rem;
 }
+
+.btn.active {
+    box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
+}

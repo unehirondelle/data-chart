@@ -73,13 +73,21 @@ class NetworkChart extends Component {
             <>
                 <ButtonGroup size='sm' aria-label="networkData" className='shadow'
                              data-chart='Linux_Network'>
-                    <Button variant="secondary" className='dark-button' data-metric='eth0_txbyt'
+                    <Button variant="secondary"
+                            className={this.state.metricName === 'eth0_txbyt' ? 'active dark-button' : 'dark-button'}
+                            data-metric='eth0_txbyt'
                             onClick={this.handleMetricChange}>eth0_txbyt</Button>
-                    <Button variant="secondary" className='dark-button' data-metric='eth0_txerr'
+                    <Button variant="secondary"
+                            className={this.state.metricName === 'eth0_txerr' ? 'active dark-button' : 'dark-button'}
+                            data-metric='eth0_txerr'
                             onClick={this.handleMetricChange}>eth0_txerrs</Button>
-                    <Button variant="secondary" className='dark-button' data-metric='eth0_rxbyt'
+                    <Button variant="secondary"
+                            className={this.state.metricName === 'eth0_rxbyt' ? 'active dark-button' : 'dark-button'}
+                            data-metric='eth0_rxbyt'
                             onClick={this.handleMetricChange}>eth0_rxbyt</Button>
-                    <Button variant="secondary" className='dark-button' data-metric='eth0_rxerrs'
+                    <Button variant="secondary"
+                            className={this.state.metricName === 'eth0_rxerrs' ? 'active dark-button' : 'dark-button'}
+                            data-metric='eth0_rxerrs'
                             onClick={this.handleMetricChange}>eth0_rxerrs</Button>
                 </ButtonGroup>
                 <Line
