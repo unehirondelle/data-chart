@@ -4,7 +4,7 @@ Dashboard that displays three charts with information about CPU, Network, and Me
 
 ## Deployed version of the app
 
-https://dashboard.heroku.com/apps/data-chart-app
+http://data-chart-app.herokuapp.com/
 
 ## Run the application locally
 
